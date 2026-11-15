@@ -104,7 +104,7 @@ content exists only in memory while unlocked. Search is an in-memory index built
 
 ## Server and deployment
 
-- One image, one volume (`/data` with the SQLite file), one port. An Unraid template is included.
+- One image, one volume (`/data` with the SQLite file), one port. It runs anywhere Docker does.
 - Registration is open only until the first account exists.
 - TLS is optional (LAN/VPN), but login rate limiting is on regardless.
 - Backup = copy `/data`. It is all ciphertext.

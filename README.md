@@ -43,7 +43,7 @@ docker run -d --name twonote --restart unless-stopped -p 8080:8080 -v twonote-da
 ```
 
 The first client to connect creates the account; registration then closes. Back up the `/data`
-volume: it holds only ciphertext. [deploy/README.md](deploy/README.md) covers Unraid, backup and
+volume: it holds only ciphertext. [deploy/README.md](deploy/README.md) covers Docker Compose, backup and
 restore.
 
 ## Build and install the client
@@ -73,7 +73,7 @@ dotnet run --project src/TwoNote.App
 | `src/TwoNote.Core` | Portable .NET library: crypto, key hierarchy, documents, local store, sync client |
 | `src/TwoNote.Server` | ASP.NET Core + SQLite server: auth, ciphertext log, WebSocket notifications |
 | `src/TwoNote.App` | WinUI 3 Windows client |
-| `deploy/` | Dockerfile, compose file, Unraid template |
+| `deploy/` | Dockerfile, compose file, deployment notes |
 | `docs/DESIGN.md` | Architecture, decisions, open items |
 | `docs/PROTOCOL.md` | Wire protocol, crypto and document format: the contract for other clients |
 | `docs/test-vectors.json` | Crypto test vectors every client implementation must reproduce |
