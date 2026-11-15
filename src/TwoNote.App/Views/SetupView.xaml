@@ -1,0 +1,120 @@
+<UserControl
+    x:Class="TwoNote.App.Views.SetupView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Padding="24,16,24,32">
+            <Border MaxWidth="520" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="32,28"
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+                <StackPanel Spacing="12">
+
+                    <!-- Step 1: the server -->
+                    <StackPanel x:Name="ServerPanel" Spacing="12">
+                        <TextBlock Text="Welcome to TwoNote" Style="{ThemeResource TitleTextBlockStyle}" />
+                        <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   Text="Your notes are encrypted on this PC before they are sent anywhere. First, where is your TwoNote server?" />
+                        <TextBox x:Name="ServerUrlBox" Header="Server address" PlaceholderText="http://nas.local:8080" IsSpellCheckEnabled="False" />
+                        <InfoBar x:Name="ServerError" Severity="Error" IsOpen="False" IsClosable="False" />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Button x:Name="ConnectButton" Content="Connect" Style="{ThemeResource AccentButtonStyle}" MinWidth="120" />
+                            <ProgressRing x:Name="ServerProgress" IsActive="False" Width="20" Height="20" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Step 2: new account or another device -->
+                    <StackPanel x:Name="ChoicePanel" Spacing="12" Visibility="Collapsed">
+                        <TextBlock Text="Set up this device" Style="{ThemeResource TitleTextBlockStyle}" />
+                        <TextBlock x:Name="ServerInfo" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                        <Button x:Name="ChooseCreateButton" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,12"
+                                AutomationProperties.Name="Create account">
+                            <StackPanel>
+                                <TextBlock Text="Create account" Style="{ThemeResource BodyStrongTextBlockStyle}" />
+                                <TextBlock x:Name="ChooseCreateNote" Text="This is the first device. You get a Secret Key and an Emergency Kit."
+                                           TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="ChooseEnrolButton" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Padding="16,12"
+                                AutomationProperties.Name="Add this device">
+                            <StackPanel>
+                                <TextBlock Text="Add this device" Style="{ThemeResource BodyStrongTextBlockStyle}" />
+                                <TextBlock Text="You already have an account. You need your password and your Secret Key."
+                                           TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                            </StackPanel>
+                        </Button>
+                        <HyperlinkButton x:Name="ChangeServerButton" Content="Use a different server" Padding="0" />
+                    </StackPanel>
+
+                    <!-- Step 3a: create the account -->
+                    <StackPanel x:Name="CreatePanel" Spacing="10" Visibility="Collapsed">
+                        <TextBlock Text="Create account" Style="{ThemeResource TitleTextBlockStyle}" />
+                        <TextBox x:Name="CreateUsername" Header="Username" IsSpellCheckEnabled="False" MaxLength="64" />
+                        <PasswordBox x:Name="CreatePassword" Header="Master password" />
+                        <ProgressBar x:Name="StrengthBar" Minimum="0" Maximum="4" Value="0" AutomationProperties.Name="Password strength" />
+                        <TextBlock x:Name="StrengthHint" TextWrapping="Wrap" Style="{ThemeResource CaptionTextBlockStyle}"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                        <PasswordBox x:Name="CreatePassword2" Header="Repeat master password" />
+                        <TextBox x:Name="CreateDevice" Header="Name of this device" MaxLength="100" />
+                        <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   Text="The password is never sent to the server and cannot be reset. If you forget it, your notes are gone." />
+                        <InfoBar x:Name="CreateError" Severity="Error" IsOpen="False" IsClosable="False" />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Button x:Name="CreateButton" Content="Create account" Style="{ThemeResource AccentButtonStyle}" MinWidth="140" />
+                            <Button x:Name="CreateBackButton" Content="Back" />
+                            <ProgressRing x:Name="CreateProgress" IsActive="False" Width="20" Height="20" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Step 3b: add this device to an existing account -->
+                    <StackPanel x:Name="EnrolPanel" Spacing="10" Visibility="Collapsed">
+                        <TextBlock Text="Add this device" Style="{ThemeResource TitleTextBlockStyle}" />
+                        <TextBox x:Name="EnrolUsername" Header="Username" IsSpellCheckEnabled="False" MaxLength="64" />
+                        <PasswordBox x:Name="EnrolPassword" Header="Master password" />
+                        <TextBox x:Name="EnrolSecretKey" Header="Secret Key" PlaceholderText="T2-XXXXXX-XXXXXX-XXXXXX-XXXXXXXX" IsSpellCheckEnabled="False"
+                                 FontFamily="Consolas" CharacterCasing="Upper" />
+                        <TextBlock TextWrapping="Wrap" Style="{ThemeResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   Text="The Secret Key is on your Emergency Kit, and in Settings on a device that is already set up." />
+                        <TextBox x:Name="EnrolDevice" Header="Name of this device" MaxLength="100" />
+                        <InfoBar x:Name="EnrolError" Severity="Error" IsOpen="False" IsClosable="False" />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Button x:Name="EnrolButton" Content="Add device" Style="{ThemeResource AccentButtonStyle}" MinWidth="140" />
+                            <Button x:Name="EnrolBackButton" Content="Back" />
+                            <ProgressRing x:Name="EnrolProgress" IsActive="False" Width="20" Height="20" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Step 4: Secret Key and Emergency Kit -->
+                    <StackPanel x:Name="KitPanel" Spacing="12" Visibility="Collapsed">
+                        <TextBlock Text="Save your Emergency Kit" Style="{ThemeResource TitleTextBlockStyle}" />
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="Your account is ready. This is your Secret Key. Together with your password it is the only way into your notes." />
+                        <Border Padding="16,12" CornerRadius="6" Background="{ThemeResource ControlFillColorDefaultBrush}"
+                                BorderBrush="{ThemeResource ControlStrokeColorDefaultBrush}" BorderThickness="1">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock x:Name="SecretKeyText" FontFamily="Consolas" FontSize="18" FontWeight="SemiBold" IsTextSelectionEnabled="True"
+                                           VerticalAlignment="Center" TextWrapping="Wrap" AutomationProperties.Name="Secret Key" />
+                                <Button x:Name="CopyKeyButton" Grid.Column="1" ToolTipService.ToolTip="Copy" AutomationProperties.Name="Copy Secret Key"
+                                        Background="Transparent" BorderThickness="0">
+                                    <FontIcon Glyph="&#xE8C8;" FontSize="16" />
+                                </Button>
+                            </Grid>
+                        </Border>
+                        <InfoBar Severity="Warning" IsOpen="True" IsClosable="False" Title="There is no recovery"
+                                 Message="If you lose your password, or every copy of the Secret Key, your notes cannot be decrypted by anyone. The Emergency Kit is a page to print that holds the server address, your username and the Secret Key, with a line for writing down the password." />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Button x:Name="SaveKitButton" Content="Save Emergency Kit…" Style="{ThemeResource AccentButtonStyle}" />
+                            <Button x:Name="OpenKitButton" Content="Open it to print" IsEnabled="False" />
+                        </StackPanel>
+                        <TextBlock x:Name="KitStatus" TextWrapping="Wrap" Style="{ThemeResource CaptionTextBlockStyle}"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                        <CheckBox x:Name="KitConfirm">
+                            <TextBlock TextWrapping="Wrap" Text="I have saved or printed the Emergency Kit, or written the Secret Key down, and I understand that my notes cannot be recovered without it." />
+                        </CheckBox>
+                        <Button x:Name="KitContinueButton" Content="Continue" IsEnabled="False" MinWidth="120" HorizontalAlignment="Right" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

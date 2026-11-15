@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TwoNote.App.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TwoNote.Core\TwoNote.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The app is a WinUI executable, which a test project cannot reference. Its logic that needs no window is
+         compiled into the tests from the same source files instead. -->
+    <Compile Include="..\..\src\TwoNote.App\Logic\*.cs" Link="App\Logic\%(Filename)%(Extension)" />
+    <Compile Include="..\..\src\TwoNote.App\Editor\RichModel.cs" Link="App\Editor\RichModel.cs" />
+    <Compile Include="..\..\src\TwoNote.App\Editor\PasteFilter.cs" Link="App\Editor\PasteFilter.cs" />
+    <Compile Include="..\..\src\TwoNote.App\Editor\HtmlPaste.cs" Link="App\Editor\HtmlPaste.cs" />
+    <Compile Include="..\..\src\TwoNote.App\Secrets\DpapiSecretStore.cs" Link="App\Secrets\DpapiSecretStore.cs" />
+  </ItemGroup>
+
+</Project>

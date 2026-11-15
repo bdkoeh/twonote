@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TwoNote.Core.Tests</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.15" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TwoNote.Core\TwoNote.Core.csproj" />
+    <!-- The sync engine is tested against the real server, hosted in-process. -->
+    <ProjectReference Include="..\..\src\TwoNote.Server\TwoNote.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The protocol test vectors are the contract; the tests read the same file every client must pass. -->
+    <Content Include="..\..\docs\test-vectors.json" Link="test-vectors.json" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\docs\test-vectors.json')" />
+  </ItemGroup>
+
+</Project>

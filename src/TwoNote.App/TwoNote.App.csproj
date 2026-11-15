@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>TwoNote.App</RootNamespace>
+    <AssemblyName>TwoNote</AssemblyName>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <!-- Unpackaged and self-contained: a plain folder with an exe; no Store account, no signing certificate. -->
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\TwoNote.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Microsoft.WindowsAppSDK (WinUI 3): proprietary "Microsoft Software License Terms" (free, no account), NOT MIT.
+         See docs/DESIGN.md "Licensing and accounts". The only package the app adds; everything else comes through TwoNote.Core. -->
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.5" />
+  </ItemGroup>
+
+  <!-- `dotnet publish` of an unpackaged WinUI app leaves out the app's own compiled XAML (.xbf) and resource
+       index (.pri); without them the window fails to load with a XamlParseException. Copy them over. -->
+  <Target Name="CopyWinUIResourcesOnPublish" AfterTargets="Publish">
+    <ItemGroup>
+      <_WinUIResource Include="$(OutDir)**\*.xbf;$(OutDir)$(AssemblyName).pri" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_WinUIResource)" DestinationFiles="@(_WinUIResource->'$(PublishDir)%(RecursiveDir)%(Filename)%(Extension)')" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TwoNote.Core\TwoNote.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\TwoNote.ico" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

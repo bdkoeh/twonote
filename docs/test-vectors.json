@@ -1,0 +1,159 @@
+{
+  "description": "TwoNote protocol v1 test vectors for PROTOCOL.md sections 1.1 to 1.4. Every client implementation must reproduce every expected value.",
+  "binaryEncoding": "All binary values are lowercase hex. Strings are JSON strings; non-ASCII characters are written as \\u escapes.",
+  "secretKey": {
+    "bytes": "8f3a1c5ed247b906e17d4ac3902bf865",
+    "formatted": "T2-HWX1RQ-PJ8YWG-DRBX9B-1S0AZRCM",
+    "accepted": [
+      "T2-HWX1RQ-PJ8YWG-DRBX9B-1S0AZRCM",
+      "t2-hwx1rq-pj8ywg-drbx9b-1s0azrcm",
+      "T2HWX1RQPJ8YWGDRBX9B1S0AZRCM",
+      "  T2 HWX1RQ PJ8YWG DRBX9B 1S0AZRCM  ",
+      "T2-HWXIRQ-PJ8YWG-DRBX9B-ISOAZRCM",
+      "t2-hwxlrq-pj8ywg-drbx9b-lsoazrcm",
+      "HWX1RQ-PJ8YWG-DRBX9B-1S0AZRCM"
+    ],
+    "rejected": [
+      "",
+      "T2-",
+      "T2-HWX1RQ-PJ8YWG-DRBX9B-1S0AZRC",
+      "T2-HWX1RQ-PJ8YWG-DRBX9B-1S0AZRCM0",
+      "T3-HWX1RQ-PJ8YWG-DRBX9B-1S0AZRCM",
+      "T2-UWX1RQ-PJ8YWG-DRBX9B-1S0AZRCM",
+      "T2-HWX1RQ-PJ8YWG-DRBX9B-1S0AZRC1",
+      "T2-HWX1RQ_PJ8YWG_DRBX9B_1S0AZRCM"
+    ]
+  },
+  "keyDerivation": [
+    {
+      "name": "ascii",
+      "password": "correct horse battery staple",
+      "passwordNfkcUtf8": "636f727265637420686f727365206261747465727920737461706c65",
+      "secretKey": "8f3a1c5ed247b906e17d4ac3902bf865",
+      "accountId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      "kdfSalt": "202122232425262728292a2b2c2d2e2f",
+      "kdfParams": {
+        "alg": "argon2id13",
+        "ops": 3,
+        "memKiB": 65536
+      },
+      "kPw": "9d61ba4d6089fbd0d42da7867c0b1d49833b7215c90a15c559e9141005b5376c",
+      "kSk": "60c56ef362ad84d4bdd010131ee4aeca60a1e3c1839ba9b4f2682d474e9b6cf1",
+      "root": "fda4d4be02247f0469fdb79562efb383e39a91d44a91bc71ab8139574b2e5b9d",
+      "unlockKey": "bf5b6cc6935931637dd33f648b69c4c28813d69aec6cc86ec54dea2028194f88",
+      "authSeed": "5bc5c947f45b723bc45f1cdfaa42d704c72b21a9bb82f76cd068425cf9382ec5",
+      "authPublicKey": "4022575a8b828f5b3ab84cf088796dfc088a086084348e80284a7381560f583d"
+    },
+    {
+      "name": "nfkc",
+      "password": "\uFF50a\u0308sswo\u0308rd \uFB01\u2460 \u212B",
+      "passwordNfkcUtf8": "70c3a4737377c3b672642066693120c385",
+      "secretKey": "8f3a1c5ed247b906e17d4ac3902bf865",
+      "accountId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      "kdfSalt": "303132333435363738393a3b3c3d3e3f",
+      "kdfParams": {
+        "alg": "argon2id13",
+        "ops": 3,
+        "memKiB": 65536
+      },
+      "kPw": "65d5fe5e3853f2ccddd9b4f3d7bee6a2170aff9d02b00377e400da136485667e",
+      "kSk": "60c56ef362ad84d4bdd010131ee4aeca60a1e3c1839ba9b4f2682d474e9b6cf1",
+      "root": "051090ad5afe76186009a4e0c95a486877ab1c5c812baac31668f7542a1e0a8f",
+      "unlockKey": "801c8a6297d1ac455196e4be8a38f115f3e20c994013c653880f144be20ec392",
+      "authSeed": "1e57de5d06cd7b149f8dda1c3a456fd21a238de9203f457258fe14e73cfeb66c",
+      "authPublicKey": "86cb4b423907007b22df3130d4d690f1ad33d0e915e061353fcc11e53b6b7870"
+    }
+  ],
+  "sealedBlob": [
+    {
+      "name": "vault",
+      "kind": "vault",
+      "key": "bf5b6cc6935931637dd33f648b69c4c28813d69aec6cc86ec54dea2028194f88",
+      "id": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      "nonce": "404142434445464748494a4b4c4d4e4f5051525354555657",
+      "plaintext": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "aad": "twonote/v1|vault|a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      "blob": "01404142434445464748494a4b4c4d4e4f5051525354555657bcc6b866fc2996b1f964087b4a6a5225985831e34bba96a68a584cc10095f4d22ace4372998ec1c7e3f7dfebdb50d1c9"
+    },
+    {
+      "name": "nbkey",
+      "kind": "nbkey",
+      "key": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "id": "0f1e2d3c4b5a69788796a5b4c3d2e1f0",
+      "nonce": "606162636465666768696a6b6c6d6e6f7071727374757677",
+      "plaintext": "f0e1d2c3b4a5968778695a4b3c2d1e0fffeeddccbbaa99887766554433221100",
+      "aad": "twonote/v1|nbkey|0f1e2d3c4b5a69788796a5b4c3d2e1f0",
+      "blob": "01606162636465666768696a6b6c6d6e6f7071727374757677453863e5e2adc2af5b7ea7643d5d1db1cd1046e0b5fb6bec277b7332a65375e12635e1c84b1baacfb5ed5cbd41a19cb2"
+    },
+    {
+      "name": "update",
+      "kind": "update",
+      "key": "f0e1d2c3b4a5968778695a4b3c2d1e0fffeeddccbbaa99887766554433221100",
+      "id": "00112233445566778899aabbccddeeff",
+      "nonce": "808182838485868788898a8b8c8d8e8f9091929394959697",
+      "plaintext": "7374616e642d696e20666f72206f6e6520596a7320763120757064617465",
+      "aad": "twonote/v1|update|00112233445566778899aabbccddeeff",
+      "blob": "01808182838485868788898a8b8c8d8e8f9091929394959697ecab45fea8e91c536a13acc06cdeff95b66d01d5fb089067b92243dff39ccb9816b8a4b9b971f3bfdc6715241f25"
+    },
+    {
+      "name": "snapshot",
+      "kind": "snapshot",
+      "key": "f0e1d2c3b4a5968778695a4b3c2d1e0fffeeddccbbaa99887766554433221100",
+      "id": "00112233445566778899aabbccddeeff",
+      "nonce": "a0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7",
+      "plaintext": "7374616e642d696e20666f72206120596a732076312066756c6c2d737461746520757064617465",
+      "aad": "twonote/v1|snapshot|00112233445566778899aabbccddeeff",
+      "blob": "01a0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b71a2bce1709049af3f49404c48a86bc3e8e41789df2b133359b3012a975f6dd87170f2c8adeda22c24efb8502b272137168d12b84444ff6"
+    },
+    {
+      "name": "update-empty-plaintext",
+      "kind": "update",
+      "key": "f0e1d2c3b4a5968778695a4b3c2d1e0fffeeddccbbaa99887766554433221100",
+      "id": "00112233445566778899aabbccddeeff",
+      "nonce": "c0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7",
+      "plaintext": "",
+      "aad": "twonote/v1|update|00112233445566778899aabbccddeeff",
+      "blob": "01c0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7bf15d59cf66104c3a726b6197546f8c1"
+    }
+  ],
+  "loginSignature": {
+    "note": "authSeed and authPublicKey are those of the keyDerivation case named ascii.",
+    "authSeed": "5bc5c947f45b723bc45f1cdfaa42d704c72b21a9bb82f76cd068425cf9382ec5",
+    "authPublicKey": "4022575a8b828f5b3ab84cf088796dfc088a086084348e80284a7381560f583d",
+    "nonce": "6c6f67696e2d6e6f6e63652d666f722d74776f6e6f74652d766563746f727321",
+    "message": "74776f6e6f74652f76312f6c6f67696e6c6f67696e2d6e6f6e63652d666f722d74776f6e6f74652d766563746f727321",
+    "signature": "79247845cd9e72d9d64be66d88d301fcf13a89f25d2093afe1ac85a19093e4dabe619fcf3bb2058844a94e3bc4ab9c83695122c187973036da979c1ef2cc080c"
+  },
+  "wireEncoding": {
+    "base64Url": [
+      {
+        "bytes": "",
+        "text": ""
+      },
+      {
+        "bytes": "00",
+        "text": "AA"
+      },
+      {
+        "bytes": "fbff",
+        "text": "-_8"
+      },
+      {
+        "bytes": "fbffbe",
+        "text": "-_--"
+      },
+      {
+        "bytes": "00112233445566778899aabbccddeeff",
+        "text": "ABEiM0RVZneImaq7zN3u_w"
+      },
+      {
+        "bytes": "6c6f67696e2d6e6f6e63652d666f722d74776f6e6f74652d766563746f727321",
+        "text": "bG9naW4tbm9uY2UtZm9yLXR3b25vdGUtdmVjdG9ycyE"
+      }
+    ],
+    "id": {
+      "bytes": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+      "text": "a1b2c3d4e5f60718293a4b5c6d7e8f90"
+    }
+  }
+}

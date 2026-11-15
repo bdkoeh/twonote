@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>twonote</Name>
+  <!-- Placeholder: no registry has been chosen yet. Build or load the image on the Unraid
+       box first (see deploy/README.md); Unraid then finds it locally under this name. -->
+  <Repository>twonote-server:latest</Repository>
+  <Registry/>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <Overview>TwoNote sync server. Stores only end-to-end encrypted notes (ciphertext) for the TwoNote apps. One account per server; registration closes after the first account is created. Plain HTTP on port 8080, intended for LAN or VPN use.</Overview>
+  <Category>Productivity: Status:Beta</Category>
+  <WebUI/>
+  <TemplateURL/>
+  <Icon/>
+  <!-- Run as Unraid's nobody:users so the appdata share stays readable and writable. -->
+  <ExtraParams>--user 99:100 --restart unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="API port" Target="8080" Default="8080" Mode="tcp" Description="HTTP port the TwoNote apps connect to." Type="Port" Display="always" Required="true" Mask="false">8080</Config>
+  <Config Name="Data" Target="/data" Default="/mnt/user/appdata/twonote" Mode="rw" Description="SQLite database (twonote.db). Everything in it is ciphertext; back up this folder." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/twonote</Config>
+</Container>

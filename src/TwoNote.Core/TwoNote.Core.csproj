@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TwoNote.Core</RootNamespace>
+    <AssemblyName>TwoNote.Core</AssemblyName>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Geralt: MIT. Brings in the official libsodium package (ISC) with win-x64/linux-x64 natives. -->
+    <PackageReference Include="Geralt" Version="4.5.0" />
+    <!-- YDotNet: MIT. .NET binding of Yrs (MIT), the Rust port of Yjs; the .Native package carries the natives. -->
+    <PackageReference Include="YDotNet" Version="0.7.0" />
+    <PackageReference Include="YDotNet.Native" Version="0.7.0" />
+    <!-- Microsoft.Data.Sqlite: MIT. Brings SQLitePCLRaw (Apache-2.0) and SQLite itself (public domain). -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TwoNote.Core.Tests" />
+  </ItemGroup>
+
+</Project>

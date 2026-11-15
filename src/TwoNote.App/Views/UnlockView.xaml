@@ -1,0 +1,23 @@
+<UserControl
+    x:Class="TwoNote.App.Views.UnlockView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Padding="24">
+        <Border MaxWidth="420" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="32,28"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8">
+            <StackPanel Spacing="12" Width="340">
+                <FontIcon Glyph="&#xE72E;" FontSize="32" HorizontalAlignment="Left" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" />
+                <TextBlock Text="TwoNote is locked" Style="{ThemeResource TitleTextBlockStyle}" />
+                <TextBlock x:Name="AccountText" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                <PasswordBox x:Name="PasswordInput" Header="Master password" AutomationProperties.Name="Master password" />
+                <InfoBar x:Name="ErrorBar" Severity="Error" IsOpen="False" IsClosable="False" />
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Button x:Name="UnlockButton" Content="Unlock" Style="{ThemeResource AccentButtonStyle}" MinWidth="120" />
+                    <ProgressRing x:Name="Progress" IsActive="False" Width="20" Height="20" />
+                </StackPanel>
+                <HyperlinkButton x:Name="RemoveButton" Content="Remove this account from this device…" Padding="0" Margin="0,8,0,0" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

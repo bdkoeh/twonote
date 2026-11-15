@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TwoNote.App/TwoNote.App.csproj">
+      <Platform Solution="*|Any CPU" Project="x64" />
+    </Project>
+    <Project Path="src/TwoNote.Core/TwoNote.Core.csproj" />
+    <Project Path="src/TwoNote.Server/TwoNote.Server.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TwoNote.App.Tests/TwoNote.App.Tests.csproj" />
+    <Project Path="tests/TwoNote.Core.Tests/TwoNote.Core.Tests.csproj" />
+    <Project Path="tests/TwoNote.E2E.Tests/TwoNote.E2E.Tests.csproj" />
+    <Project Path="tests/TwoNote.Server.Tests/TwoNote.Server.Tests.csproj" />
+  </Folder>
+</Solution>

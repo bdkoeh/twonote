@@ -1,0 +1,150 @@
+<UserControl
+    x:Class="TwoNote.App.Views.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="SectionsColumn" Width="232" />
+            <ColumnDefinition x:Name="PagesColumn" Width="252" />
+            <ColumnDefinition x:Name="PageColumn" Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Notebook switcher and sections -->
+        <Grid x:Name="SectionsPane" Grid.Column="0" RowDefinitions="Auto,Auto,*" Padding="8,4,2,8">
+            <DropDownButton x:Name="NotebookButton" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Height="36"
+                            AutomationProperties.Name="Notebook" ToolTipService.ToolTip="Switch notebook">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon Glyph="&#xE82D;" FontSize="16" />
+                    <TextBlock x:Name="NotebookTitle" TextTrimming="CharacterEllipsis" MaxWidth="150" />
+                </StackPanel>
+            </DropDownButton>
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="8,10,0,2">
+                <TextBlock Text="SECTIONS" Style="{StaticResource PaneHeader}" />
+                <Button x:Name="AddSectionButton" Grid.Column="1" Style="{StaticResource ToolButton}" AllowFocusOnInteraction="True"
+                        AutomationProperties.Name="New section" ToolTipService.ToolTip="New section (Ctrl+Shift+N)">
+                    <FontIcon Glyph="&#xE710;" FontSize="14" />
+                </Button>
+            </Grid>
+            <ListView x:Name="SectionList" Grid.Row="2" SelectionMode="Single" CanReorderItems="True" AllowDrop="True" CanDragItems="True"
+                      AutomationProperties.Name="Sections" />
+        </Grid>
+
+        <!-- Pages of the section -->
+        <Grid x:Name="PagesPane" Grid.Column="1" RowDefinitions="Auto,*" Padding="2,4,6,8">
+            <Grid ColumnDefinitions="*,Auto" Margin="8,4,0,2" Height="36">
+                <TextBlock Text="PAGES" Style="{StaticResource PaneHeader}" />
+                <Button x:Name="AddPageButton" Grid.Column="1" Style="{StaticResource ToolButton}" AllowFocusOnInteraction="True"
+                        AutomationProperties.Name="New page" ToolTipService.ToolTip="New page (Ctrl+N)">
+                    <FontIcon Glyph="&#xE710;" FontSize="14" />
+                </Button>
+            </Grid>
+            <ListView x:Name="PageList" Grid.Row="1" SelectionMode="Single" IsItemClickEnabled="True" CanReorderItems="True" AllowDrop="True" CanDragItems="True"
+                      AutomationProperties.Name="Pages" />
+            <TextBlock x:Name="PagesEmpty" Grid.Row="1" Text="No pages in this section yet." Margin="12,12,8,0" TextWrapping="Wrap"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" Visibility="Collapsed" />
+        </Grid>
+
+        <!-- The page -->
+        <Grid x:Name="PagePane" Grid.Column="2" RowDefinitions="Auto,*" Margin="0,0,0,0">
+            <InfoBar x:Name="AuthBar" Severity="Warning" IsOpen="False" IsClosable="False" Title="Sign in again"
+                     Message="This device was signed out by the server (the password was changed on another device, or this device was revoked). Your edits are kept here and sync again once you sign in."
+                     Margin="0,0,8,6">
+                <InfoBar.ActionButton>
+                    <Button x:Name="SignInButton" Content="Sign in" />
+                </InfoBar.ActionButton>
+            </InfoBar>
+            <!-- Solid, not a translucent layer: the text caret is drawn by inverting what is under it, and over a
+                 translucent fill on the Mica backdrop that inversion cancels out (invisible caret in the light theme). -->
+            <Border x:Name="PageBorder" Grid.Row="1" Background="{ThemeResource SolidBackgroundFillColorTertiaryBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1,1,0,0" CornerRadius="8,0,0,0">
+                <Grid>
+                    <Grid x:Name="EditorPanel" RowDefinitions="Auto,Auto,*" Visibility="Collapsed">
+                        <TextBox x:Name="TitleBox" PlaceholderText="Untitled page" FontSize="26" FontWeight="SemiBold" BorderThickness="0"
+                                 Background="Transparent" Margin="28,18,28,0" Padding="4,4,4,6" MaxLength="200" AutomationProperties.Name="Page title">
+                            <TextBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent" />
+                                <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent" />
+                                <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                            </TextBox.Resources>
+                        </TextBox>
+                        <ScrollViewer Grid.Row="1" HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled"
+                                      VerticalScrollBarVisibility="Disabled" Margin="26,6,16,6">
+                            <StackPanel x:Name="Toolbar" Orientation="Horizontal" Spacing="2">
+                                <Button x:Name="UndoButton" Style="{StaticResource ToolButton}" AutomationProperties.Name="Undo" ToolTipService.ToolTip="Undo (Ctrl+Z)">
+                                    <FontIcon Glyph="&#xE7A7;" FontSize="15" />
+                                </Button>
+                                <Button x:Name="RedoButton" Style="{StaticResource ToolButton}" AutomationProperties.Name="Redo" ToolTipService.ToolTip="Redo (Ctrl+Y)">
+                                    <FontIcon Glyph="&#xE7A6;" FontSize="15" />
+                                </Button>
+                                <AppBarSeparator />
+                                <ToggleButton x:Name="BoldButton" Style="{StaticResource ToolToggle}" AutomationProperties.Name="Bold" ToolTipService.ToolTip="Bold (Ctrl+B)">
+                                    <FontIcon Glyph="&#xE8DD;" FontSize="15" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="ItalicButton" Style="{StaticResource ToolToggle}" AutomationProperties.Name="Italic" ToolTipService.ToolTip="Italic (Ctrl+I)">
+                                    <FontIcon Glyph="&#xE8DB;" FontSize="15" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="UnderlineButton" Style="{StaticResource ToolToggle}" AutomationProperties.Name="Underline" ToolTipService.ToolTip="Underline (Ctrl+U)">
+                                    <FontIcon Glyph="&#xE8DC;" FontSize="15" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="StrikeButton" Style="{StaticResource ToolToggle}" AutomationProperties.Name="Strikethrough" ToolTipService.ToolTip="Strikethrough (Ctrl+Shift+X)">
+                                    <FontIcon Glyph="&#xEDE0;" FontSize="15" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="CodeButton" Style="{StaticResource ToolToggle}" AutomationProperties.Name="Inline code" ToolTipService.ToolTip="Inline code (Ctrl+E)">
+                                    <FontIcon Glyph="&#xE943;" FontSize="15" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="LinkButton" Style="{StaticResource ToolToggle}" AutomationProperties.Name="Link" ToolTipService.ToolTip="Link (Ctrl+K). Ctrl+click a link to open it.">
+                                    <FontIcon Glyph="&#xE71B;" FontSize="15" />
+                                    <FlyoutBase.AttachedFlyout>
+                                        <Flyout x:Name="LinkFlyout" Placement="Bottom">
+                                            <StackPanel Width="320" Spacing="8">
+                                                <TextBox x:Name="LinkTextBox" Header="Text" />
+                                                <TextBox x:Name="LinkUrlBox" Header="Address" PlaceholderText="https://" IsSpellCheckEnabled="False" />
+                                                <TextBlock x:Name="LinkError" Foreground="{ThemeResource SystemFillColorCriticalBrush}" TextWrapping="Wrap" Visibility="Collapsed" />
+                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                    <Button x:Name="LinkApplyButton" Content="Apply" Style="{ThemeResource AccentButtonStyle}" />
+                                                    <Button x:Name="LinkOpenButton" Content="Open" />
+                                                    <Button x:Name="LinkRemoveButton" Content="Remove link" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Flyout>
+                                    </FlyoutBase.AttachedFlyout>
+                                </ToggleButton>
+                                <AppBarSeparator />
+                                <ToggleButton x:Name="H1Button" Style="{StaticResource ToolToggle}" Content="H1" FontWeight="SemiBold" AutomationProperties.Name="Heading 1" ToolTipService.ToolTip="Heading 1 (Ctrl+Alt+1)" />
+                                <ToggleButton x:Name="H2Button" Style="{StaticResource ToolToggle}" Content="H2" FontWeight="SemiBold" AutomationProperties.Name="Heading 2" ToolTipService.ToolTip="Heading 2 (Ctrl+Alt+2)" />
+                                <ToggleButton x:Name="H3Button" Style="{StaticResource ToolToggle}" Content="H3" FontWeight="SemiBold" AutomationProperties.Name="Heading 3" ToolTipService.ToolTip="Heading 3 (Ctrl+Alt+3)" />
+                                <AppBarSeparator />
+                                <ToggleButton x:Name="BulletButton" Style="{StaticResource ToolToggle}" AutomationProperties.Name="Bullet list" ToolTipService.ToolTip="Bullet list (Ctrl+.)">
+                                    <FontIcon Glyph="&#xE8FD;" FontSize="15" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="NumberButton" Style="{StaticResource ToolToggle}" Content="1." FontWeight="SemiBold" AutomationProperties.Name="Numbered list" ToolTipService.ToolTip="Numbered list (Ctrl+/)" />
+                                <ToggleButton x:Name="TodoButton" Style="{StaticResource ToolToggle}" AutomationProperties.Name="To-do" ToolTipService.ToolTip="To-do (Ctrl+1). Click the box to tick it.">
+                                    <FontIcon Glyph="&#xE73A;" FontSize="15" />
+                                </ToggleButton>
+                                <ToggleButton x:Name="CodeBlockButton" Style="{StaticResource ToolToggle}" Content="&gt;_" FontFamily="Consolas" FontWeight="SemiBold" AutomationProperties.Name="Code block" ToolTipService.ToolTip="Code block (Ctrl+Shift+C)" />
+                                <AppBarSeparator />
+                                <Button x:Name="OutdentButton" Style="{StaticResource ToolButton}" Content="&#x21E4;" FontSize="16" AutomationProperties.Name="Decrease indent" ToolTipService.ToolTip="Decrease indent (Shift+Tab)" />
+                                <Button x:Name="IndentButton" Style="{StaticResource ToolButton}" Content="&#x21E5;" FontSize="16" AutomationProperties.Name="Increase indent" ToolTipService.ToolTip="Increase indent (Tab in a list, Ctrl+M)" />
+                            </StackPanel>
+                        </ScrollViewer>
+                        <RichEditBox x:Name="Editor" Grid.Row="2" Margin="18,0,4,0" Padding="14,6,24,24" BorderThickness="0" Background="Transparent"
+                                     FontSize="15" AutomationProperties.Name="Page content" IsSpellCheckEnabled="True" TextWrapping="Wrap"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <RichEditBox.Resources>
+                                <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent" />
+                                <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent" />
+                                <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="Transparent" />
+                                <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+                            </RichEditBox.Resources>
+                        </RichEditBox>
+                    </Grid>
+                    <StackPanel x:Name="EmptyPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12" MaxWidth="360">
+                        <FontIcon Glyph="&#xE70B;" FontSize="40" Foreground="{ThemeResource TextFillColorTertiaryBrush}" />
+                        <TextBlock x:Name="EmptyText" TextAlignment="Center" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                        <Button x:Name="EmptyAction" HorizontalAlignment="Center" Style="{ThemeResource AccentButtonStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

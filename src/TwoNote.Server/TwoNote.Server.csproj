@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>TwoNote.Server</RootNamespace>
+    <AssemblyName>TwoNote.Server</AssemblyName>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Login signature verification (PROTOCOL.md 1.4) is the same code the clients sign with. -->
+    <ProjectReference Include="..\TwoNote.Core\TwoNote.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="TwoNote.Server.Tests" />
+  </ItemGroup>
+
+</Project>
