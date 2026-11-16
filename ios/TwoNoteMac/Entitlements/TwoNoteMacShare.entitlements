@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  The share extension: sandboxed (as every Mac extension must be), no network, no Keychain,
+  and the App Group, where it finds the share inbox's public key and leaves sealed items.
+-->
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)$(TWONOTE_MAC_BUNDLE_ID)</string>
+	</array>
+</dict>
+</plist>

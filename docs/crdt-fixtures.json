@@ -1,0 +1,933 @@
+{
+  "description": "Yjs v1 updates written by the Windows client (Yrs via YDotNet) and the state every client must read from them. Updates are lowercase hex. Apply the updates of each step in order; \u0027runs\u0027 is the page text after that step as runs of equal attributes (numbers are doubles).",
+  "page": {
+    "docId": "00112233445566778899aabbccddeeff",
+    "steps": [
+      {
+        "name": "initialize",
+        "updates": [
+          "0104f7efecb8f68007002801046d6574610d666f726d617456657273696f6e017d0127010a636f6e7461696e657273046d61696e012800f7efecb8f6800701046b696e64017704666c6f77040106633a6d61696e010a00"
+        ],
+        "runs": [
+          {
+            "text": "\n",
+            "attributes": {}
+          }
+        ]
+      },
+      {
+        "name": "insert plain text",
+        "updates": [
+          "0101f7efecb8f680070444f7efecb8f68007030b48656c6c6f20776f726c6400"
+        ],
+        "runs": [
+          {
+            "text": "Hello world\n",
+            "attributes": {}
+          }
+        ]
+      },
+      {
+        "name": "bold a word",
+        "updates": [
+          "0102f7efecb8f680070fc6f7efecb8f6800709f7efecb8f680070a04626f6c640474727565c6f7efecb8f680070ef7efecb8f680070304626f6c64046e756c6c00"
+        ],
+        "runs": [
+          {
+            "text": "Hello ",
+            "attributes": {}
+          },
+          {
+            "text": "world",
+            "attributes": {
+              "bold": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {}
+          }
+        ]
+      },
+      {
+        "name": "insert with attributes",
+        "updates": [
+          "0105f7efecb8f6800711c6f7efecb8f6800710f7efecb8f680070309756e6465726c696e650474727565c6f7efecb8f6800711f7efecb8f6800703066974616c69630474727565c4f7efecb8f6800712f7efecb8f68007030920616e64206d6f7265c6f7efecb8f680071bf7efecb8f680070309756e6465726c696e65046e756c6cc6f7efecb8f680071cf7efecb8f6800703066974616c6963046e756c6c00"
+        ],
+        "runs": [
+          {
+            "text": "Hello ",
+            "attributes": {}
+          },
+          {
+            "text": "world",
+            "attributes": {
+              "bold": true
+            }
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {}
+          }
+        ]
+      },
+      {
+        "name": "heading 1",
+        "updates": [
+          "0102f7efecb8f680071ec6f7efecb8f680071bf7efecb8f680071c05626c6f636b042268312286f7efecb8f680070305626c6f636b046e756c6c00"
+        ],
+        "runs": [
+          {
+            "text": "Hello ",
+            "attributes": {}
+          },
+          {
+            "text": "world",
+            "attributes": {
+              "bold": true
+            }
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          }
+        ]
+      },
+      {
+        "name": "second paragraph",
+        "updates": [
+          "010ef7efecb8f6800720c6f7efecb8f680071bf7efecb8f680071e09756e6465726c696e65046e756c6cc6f7efecb8f6800720f7efecb8f680071e066974616c6963046e756c6cc4f7efecb8f6800721f7efecb8f680071e010ac4f7efecb8f6800722f7efecb8f680071e08627579206d696c6bc6f7efecb8f680072af7efecb8f680071e066974616c69630474727565c6f7efecb8f680072bf7efecb8f680071e09756e6465726c696e650474727565c6f7efecb8f680071bf7efecb8f680072005626c6f636b0422683122c6f7efecb8f6800722f7efecb8f680072305626c6f636b046e756c6cc6f7efecb8f680072af7efecb8f680072b05626c6f636b0622746f646f22c6f7efecb8f680072ff7efecb8f680072b06696e64656e740132c6f7efecb8f6800730f7efecb8f680072b07636865636b6564047472756586f7efecb8f680071f05626c6f636b046e756c6c86f7efecb8f680073207636865636b6564046e756c6c86f7efecb8f680073306696e64656e74046e756c6c01f7efecb8f68007011e02"
+        ],
+        "runs": [
+          {
+            "text": "Hello ",
+            "attributes": {}
+          },
+          {
+            "text": "world",
+            "attributes": {
+              "bold": true
+            }
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo",
+              "checked": true,
+              "indent": 2
+            }
+          }
+        ]
+      },
+      {
+        "name": "link and code",
+        "updates": [
+          "0111f7efecb8f6800735c4f7efecb8f680072af7efecb8f680072f010ac4f7efecb8f6800735f7efecb8f680072f0473656520c4f7efecb8f6800739f7efecb8f680072f0473697465c4f7efecb8f680073df7efecb8f680072f08206f722072756e20c4f7efecb8f6800745f7efecb8f680072f026c73c6f7efecb8f680072af7efecb8f680073505626c6f636b0622746f646f22c6f7efecb8f6800748f7efecb8f680073506696e64656e740132c6f7efecb8f6800749f7efecb8f680073507636865636b65640474727565c6f7efecb8f6800735f7efecb8f680073605626c6f636b046e756c6cc6f7efecb8f680074bf7efecb8f680073607636865636b6564046e756c6cc6f7efecb8f680074cf7efecb8f680073606696e64656e74046e756c6cc6f7efecb8f6800739f7efecb8f680073a046c696e6b1b2268747470733a2f2f6578616d706c652e636f6d2f613f623d6322c6f7efecb8f680073df7efecb8f680073e046c696e6b046e756c6cc6f7efecb8f6800745f7efecb8f680074606737472696b650474727565c6f7efecb8f6800750f7efecb8f680074604636f64650474727565c6f7efecb8f680071df7efecb8f680070306737472696b65046e756c6cc6f7efecb8f6800752f7efecb8f680070304636f6465046e756c6c01f7efecb8f68007012f06"
+        ],
+        "runs": [
+          {
+            "text": "Hello ",
+            "attributes": {}
+          },
+          {
+            "text": "world",
+            "attributes": {
+              "bold": true
+            }
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo",
+              "checked": true,
+              "indent": 2
+            }
+          },
+          {
+            "text": "see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {}
+          }
+        ]
+      },
+      {
+        "name": "emoji and soft break",
+        "updates": [
+          "0101f7efecb8f6800754c4f7efecb8f680074df7efecb8f680073612f09f9880206c696e65e280a8627265616b2000"
+        ],
+        "runs": [
+          {
+            "text": "Hello ",
+            "attributes": {}
+          },
+          {
+            "text": "world",
+            "attributes": {
+              "bold": true
+            }
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo",
+              "checked": true,
+              "indent": 2
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {}
+          }
+        ]
+      },
+      {
+        "name": "numbered list item",
+        "updates": [
+          "0109f7efecb8f6800762c6f7efecb8f6800731f7efecb8f680072b06737472696b65046e756c6cc6f7efecb8f6800762f7efecb8f680072b04636f6465046e756c6cc4f7efecb8f6800763f7efecb8f680072b060a6669727374c6f7efecb8f6800769f7efecb8f680072b06737472696b650474727565c6f7efecb8f680076af7efecb8f680072b04636f64650474727565c6f7efecb8f6800769f7efecb8f680076a05626c6f636b04226f6c22c6f7efecb8f680076cf7efecb8f680076a06696e64656e74013186f7efecb8f680073405626c6f636b046e756c6c86f7efecb8f680076e06696e64656e74046e756c6c00"
+        ],
+        "runs": [
+          {
+            "text": "Hello ",
+            "attributes": {}
+          },
+          {
+            "text": "world",
+            "attributes": {
+              "bold": true
+            }
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo",
+              "checked": true,
+              "indent": 2
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\nfirst",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "ol",
+              "indent": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "delete a range",
+        "updates": [
+          "0001f7efecb8f68007010406"
+        ],
+        "runs": [
+          {
+            "text": "world",
+            "attributes": {
+              "bold": true
+            }
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo",
+              "checked": true,
+              "indent": 2
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\nfirst",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "ol",
+              "indent": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "remove bold",
+        "updates": [
+          "0001f7efecb8f68007010f02"
+        ],
+        "runs": [
+          {
+            "text": "world",
+            "attributes": {}
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo",
+              "checked": true,
+              "indent": 2
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\nfirst",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "ol",
+              "indent": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "uncheck and outdent",
+        "updates": [
+          "0101f7efecb8f6800770c6f7efecb8f680074df7efecb8f680075405626c6f636b046e756c6c01f7efecb8f68007014905"
+        ],
+        "runs": [
+          {
+            "text": "world",
+            "attributes": {}
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo"
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\nfirst",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "ol",
+              "indent": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "back to paragraph",
+        "updates": [
+          "0001f7efecb8f68007012d02"
+        ],
+        "runs": [
+          {
+            "text": "world",
+            "attributes": {}
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\nbuy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo"
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\nfirst",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "ol",
+              "indent": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "undo",
+        "updates": [
+          "0102f7efecb8f6800771c6f7efecb8f680071bf7efecb8f680072d05626c6f636b0422683122c6f7efecb8f6800722f7efecb8f680072e05626c6f636b046e756c6c00"
+        ],
+        "runs": [
+          {
+            "text": "world",
+            "attributes": {}
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo"
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\nfirst",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "ol",
+              "indent": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "redo",
+        "updates": [
+          "0001f7efecb8f68007017102"
+        ],
+        "runs": [
+          {
+            "text": "world",
+            "attributes": {}
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\nbuy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo"
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\nfirst",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "ol",
+              "indent": 1
+            }
+          }
+        ]
+      },
+      {
+        "name": "undo again",
+        "updates": [
+          "0102f7efecb8f6800773c6f7efecb8f680071bf7efecb8f680077105626c6f636b0422683122c6f7efecb8f6800722f7efecb8f680077205626c6f636b046e756c6c00"
+        ],
+        "runs": [
+          {
+            "text": "world",
+            "attributes": {}
+          },
+          {
+            "text": " and more",
+            "attributes": {
+              "italic": true,
+              "underline": true
+            }
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "h1"
+            }
+          },
+          {
+            "text": "buy milk",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "todo"
+            }
+          },
+          {
+            "text": "\uD83D\uDE00 line\u2028break see ",
+            "attributes": {}
+          },
+          {
+            "text": "site",
+            "attributes": {
+              "link": "https://example.com/a?b=c"
+            }
+          },
+          {
+            "text": " or run ",
+            "attributes": {}
+          },
+          {
+            "text": "ls",
+            "attributes": {
+              "code": true,
+              "strike": true
+            }
+          },
+          {
+            "text": "\nfirst",
+            "attributes": {}
+          },
+          {
+            "text": "\n",
+            "attributes": {
+              "block": "ol",
+              "indent": 1
+            }
+          }
+        ]
+      }
+    ],
+    "snapshot": "013df7efecb8f68007002801046d6574610d666f726d617456657273696f6e017d0127010a636f6e7461696e657273046d61696e012800f7efecb8f6800701046b696e64017704666c6f77040106633a6d61696e010a44f7efecb8f68007030648656c6c6f20c4f7efecb8f6800709f7efecb8f680070305776f726c64c6f7efecb8f6800709f7efecb8f680070a04626f6c640474727565c6f7efecb8f680070ef7efecb8f680070304626f6c64046e756c6cc6f7efecb8f6800710f7efecb8f680070309756e6465726c696e650474727565c6f7efecb8f6800711f7efecb8f6800703066974616c69630474727565c4f7efecb8f6800712f7efecb8f68007030920616e64206d6f7265c6f7efecb8f680071bf7efecb8f680070309756e6465726c696e65046e756c6cc6f7efecb8f680071cf7efecb8f6800703066974616c6963046e756c6cc6f7efecb8f680071bf7efecb8f680071c05626c6f636b042268312286f7efecb8f680070305626c6f636b046e756c6cc6f7efecb8f680071bf7efecb8f680071e09756e6465726c696e65046e756c6cc6f7efecb8f6800720f7efecb8f680071e066974616c6963046e756c6cc4f7efecb8f6800721f7efecb8f680071e010ac4f7efecb8f6800722f7efecb8f680071e08627579206d696c6bc6f7efecb8f680072af7efecb8f680071e066974616c69630474727565c6f7efecb8f680072bf7efecb8f680071e09756e6465726c696e650474727565c6f7efecb8f680071bf7efecb8f680072005626c6f636b0422683122c6f7efecb8f6800722f7efecb8f680072305626c6f636b046e756c6cc6f7efecb8f680072af7efecb8f680072b05626c6f636b0622746f646f22c6f7efecb8f680072ff7efecb8f680072b06696e64656e740132c6f7efecb8f6800730f7efecb8f680072b07636865636b6564047472756586f7efecb8f680071f05626c6f636b046e756c6c86f7efecb8f680073207636865636b6564046e756c6c86f7efecb8f680073306696e64656e74046e756c6cc4f7efecb8f680072af7efecb8f680072f010ac4f7efecb8f6800735f7efecb8f680072f0473656520c4f7efecb8f6800739f7efecb8f680072f0473697465c4f7efecb8f680073df7efecb8f680072f08206f722072756e20c4f7efecb8f6800745f7efecb8f680072f026c73c6f7efecb8f680072af7efecb8f680073505626c6f636b0622746f646f22c6f7efecb8f6800748f7efecb8f680073506696e64656e740132c6f7efecb8f6800749f7efecb8f680073507636865636b65640474727565c6f7efecb8f6800735f7efecb8f680073605626c6f636b046e756c6cc6f7efecb8f680074bf7efecb8f680073607636865636b6564046e756c6cc6f7efecb8f680074cf7efecb8f680073606696e64656e74046e756c6cc6f7efecb8f6800739f7efecb8f680073a046c696e6b1b2268747470733a2f2f6578616d706c652e636f6d2f613f623d6322c6f7efecb8f680073df7efecb8f680073e046c696e6b046e756c6cc6f7efecb8f6800745f7efecb8f680074606737472696b650474727565c6f7efecb8f6800750f7efecb8f680074604636f64650474727565c6f7efecb8f680071df7efecb8f680070306737472696b65046e756c6cc6f7efecb8f6800752f7efecb8f680070304636f6465046e756c6cc4f7efecb8f680074df7efecb8f680073612f09f9880206c696e65e280a8627265616b20c6f7efecb8f6800731f7efecb8f680072b06737472696b65046e756c6cc6f7efecb8f6800762f7efecb8f680072b04636f6465046e756c6cc4f7efecb8f6800763f7efecb8f680072b060a6669727374c6f7efecb8f6800769f7efecb8f680072b06737472696b650474727565c6f7efecb8f680076af7efecb8f680072b04636f64650474727565c6f7efecb8f6800769f7efecb8f680076a05626c6f636b04226f6c22c6f7efecb8f680076cf7efecb8f680076a06696e64656e74013186f7efecb8f680073405626c6f636b046e756c6c86f7efecb8f680076e06696e64656e74046e756c6cc6f7efecb8f680074df7efecb8f680075405626c6f636b046e756c6cc6f7efecb8f680071bf7efecb8f680072d05626c6f636b0422683122c6f7efecb8f6800722f7efecb8f680072e05626c6f636b046e756c6cc6f7efecb8f680071bf7efecb8f680077105626c6f636b0422683122c6f7efecb8f6800722f7efecb8f680077205626c6f636b046e756c6c01f7efecb8f680070604060f021e022d0849057102"
+  },
+  "concurrent": {
+    "docId": "00112233445566778899aabbccddeeff",
+    "base": "0105cde89beea3949303002801046d6574610d666f726d617456657273696f6e017d0127010a636f6e7461696e657273046d61696e012800cde89beea394930301046b696e64017704666c6f77040106633a6d61696e010a44cde89beea3949303031354686520717569636b2062726f776e20666f7800",
+    "a": "0105cde89beea394930317c6cde89beea394930307cde89beea39493030804626f6c640474727565c6cde89beea394930312cde89beea39493031304626f6c64046e756c6cc6cde89beea39493030dcde89beea39493030e04626f6c64046e756c6cc4cde89beea394930319cde89beea39493030e057665727920c6cde89beea39493031ecde89beea39493030e04626f6c64047472756500",
+    "b": "0103f9dfd7968596940100c4cde89beea394930316cde89beea39493030306206a756d7073c6f9dfd7968596940105cde89beea39493030305626c6f636b0422756c2286cde89beea39493030305626c6f636b046e756c6c01cde89beea3949303010806",
+    "runs": [
+      {
+        "text": "The ",
+        "attributes": {}
+      },
+      {
+        "text": "very ",
+        "attributes": {}
+      },
+      {
+        "text": "brown",
+        "attributes": {
+          "bold": true
+        }
+      },
+      {
+        "text": " fox jumps",
+        "attributes": {}
+      },
+      {
+        "text": "\n",
+        "attributes": {
+          "block": "ul"
+        }
+      }
+    ]
+  },
+  "notebook": {
+    "notebookId": "0f1e2d3c4b5a69788796a5b4c3d2e1f0",
+    "updates": [
+      "0102ef9994a7f9da8d08002801046d6574610d666f726d617456657273696f6e017d012801046d657461057469746c6501770e576f726b20e28093206e6f74657300",
+      "0104ef9994a7f9da8d080227010873656374696f6e73206464366361626565633037386464336432356235623736366462626364613665012800ef9994a7f9da8d0802057469746c65017705496e626f782800ef9994a7f9da8d0802056f72646572017701562800ef9994a7f9da8d08020764656c65746564017900",
+      "0104ef9994a7f9da8d080627010873656374696f6e73203461346463666234356162313331306362333633393639313062643861623065012800ef9994a7f9da8d0806057469746c6501770a496465617320f09f92a12800ef9994a7f9da8d0806056f72646572017701572800ef9994a7f9da8d08060764656c65746564017900",
+      "0104ef9994a7f9da8d080a27010873656374696f6e73203165316133643238653462623666363035333436376432343632366131303737012800ef9994a7f9da8d080a057469746c6501770546697273742800ef9994a7f9da8d080a056f72646572017701552800ef9994a7f9da8d080a0764656c65746564017900",
+      "0107ef9994a7f9da8d080e2701057061676573203433336665633233653430383166633132303731346539346166326134323963012800ef9994a7f9da8d080e0973656374696f6e496401772064643663616265656330373864643364323562356237363664626263646136652800ef9994a7f9da8d080e057469746c6501770853686f7070696e672800ef9994a7f9da8d080e056f72646572017701562800ef9994a7f9da8d080e0764656c6574656401792800ef9994a7f9da8d080e09637265617465644174017dadfce7cebb682800ef9994a7f9da8d080e09757064617465644174017dadfce7cebb6800",
+      "0107ef9994a7f9da8d08152701057061676573206461363132656432623464343262353161353031316630333263313733343534012800ef9994a7f9da8d08150973656374696f6e496401772064643663616265656330373864643364323562356237363664626263646136652800ef9994a7f9da8d0815057469746c6501770f546f70206f6620746865206c6973742800ef9994a7f9da8d0815056f72646572017701552800ef9994a7f9da8d08150764656c6574656401792800ef9994a7f9da8d081509637265617465644174017daefce7cebb682800ef9994a7f9da8d081509757064617465644174017daefce7cebb6800",
+      "0107ef9994a7f9da8d081c2701057061676573203131663335653832646538663033383631353863646230646261343333386561012800ef9994a7f9da8d081c0973656374696f6e496401772034613464636662343561623133313063623336333936393130626438616230652800ef9994a7f9da8d081c057469746c650177104d6f7665642068657265206c617465722800ef9994a7f9da8d081c056f72646572017701562800ef9994a7f9da8d081c0764656c6574656401792800ef9994a7f9da8d081c09637265617465644174017daefce7cebb682800ef9994a7f9da8d081c09757064617465644174017daefce7cebb6800",
+      "0102ef9994a7f9da8d0823a8ef9994a7f9da8d081001770d53686f7070696e67206c697374a8ef9994a7f9da8d0814017daefce7cebb6801ef9994a7f9da8d080210011401",
+      "0102ef9994a7f9da8d0825a8ef9994a7f9da8d081d0177206464366361626565633037386464336432356235623736366462626364613665a8ef9994a7f9da8d081f017702555601ef9994a7f9da8d08021d011f01",
+      "0101ef9994a7f9da8d0827a8ef9994a7f9da8d080b01770a5665727920666972737401ef9994a7f9da8d08010b01",
+      "0101ef9994a7f9da8d0828a8ef9994a7f9da8d080c0177015801ef9994a7f9da8d08010c01",
+      "0101ef9994a7f9da8d0829a8ef9994a7f9da8d0819017801ef9994a7f9da8d08011901",
+      "0101ef9994a7f9da8d082aa8ef9994a7f9da8d0809017801ef9994a7f9da8d08010901",
+      "0101ef9994a7f9da8d082ba8ef9994a7f9da8d080101770a576f726b206e6f74657301ef9994a7f9da8d08010101"
+    ],
+    "title": "Work notes",
+    "sections": [
+      {
+        "id": "dd6cabeec078dd3d25b5b766dbbcda6e",
+        "title": "Inbox",
+        "order": "V",
+        "deleted": false
+      },
+      {
+        "id": "4a4dcfb45ab1310cb36396910bd8ab0e",
+        "title": "Ideas \uD83D\uDCA1",
+        "order": "W",
+        "deleted": true
+      },
+      {
+        "id": "1e1a3d28e4bb6f6053467d24626a1077",
+        "title": "Very first",
+        "order": "X",
+        "deleted": false
+      }
+    ],
+    "pages": [
+      {
+        "id": "da612ed2b4d42b51a5011f032c173454",
+        "sectionId": "dd6cabeec078dd3d25b5b766dbbcda6e",
+        "title": "Top of the list",
+        "order": "U",
+        "deleted": true,
+        "createdAt": 1794707881774,
+        "updatedAt": 1794707881774
+      },
+      {
+        "id": "11f35e82de8f0386158cdb0dba4338ea",
+        "sectionId": "dd6cabeec078dd3d25b5b766dbbcda6e",
+        "title": "Moved here later",
+        "order": "UV",
+        "deleted": false,
+        "createdAt": 1794707881774,
+        "updatedAt": 1794707881774
+      },
+      {
+        "id": "433fec23e4081fc120714e94af2a429c",
+        "sectionId": "dd6cabeec078dd3d25b5b766dbbcda6e",
+        "title": "Shopping list",
+        "order": "V",
+        "deleted": false,
+        "createdAt": 1794707881773,
+        "updatedAt": 1794707881774
+      }
+    ]
+  }
+}

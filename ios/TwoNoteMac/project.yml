@@ -1,0 +1,300 @@
+# TwoNote for the Mac: a native AppKit/SwiftUI app (not the iPad app run on the Mac). Generate
+# with `xcodegen` on the Mac; the .xcodeproj is not committed.
+#
+# A project of its own beside ../TwoNote rather than a second platform in that one: the iOS
+# project keeps building and testing exactly as before, and the Mac's signing cannot get in
+# the way of the simulator runs.
+#
+# Model code is shared by compiling the iPhone app's files (../TwoNote/Sources/Model and the
+# files of ../TwoNote/Shared) into these targets as well; the Mac's own views, editor host,
+# share sheet and app life cycle are in Sources/ and ShareExtension/. PRODUCT_NAME is TwoNote,
+# so the module is called TwoNote on both platforms and the tests import it the same way.
+#
+# Identity and signing come from ../Config/TwoNote.xcconfig (neutral defaults) and the optional
+# ../Config/Local.xcconfig (your team id and bundle prefix; copy Local.xcconfig.example).
+#
+# Three products, as on the iPhone: the app (<prefix>.mac) and two extensions embedded in it,
+# the share extension (<prefix>.mac.share, "TwoNote" in the Share menu) and the widget
+# (<prefix>.mac.widget, desktop and Notification Center). All three are in the App Group
+# <team>.<prefix>.mac (team-prefixed, the Mac's own form of App Group: see
+# Entitlements/TwoNoteMac.entitlements); each has its entitlements file in Entitlements/. Their
+# Info.plist carries the group (TwoNoteAppGroup) and the notification prefix
+# (TwoNoteNotificationPrefix), which ../TwoNote/Shared/SharedContainer.swift reads at run time.
+#
+# Signing with a team (DEVELOPMENT_TEAM in Local.xcconfig): automatic, the team's Apple
+# Development certificate. The app is signed with a development provisioning profile (the Mac
+# has to be registered in the developer account): the profile is what gives it its application
+# identifier, which the data-protection Keychain (and with it Touch ID) needs. The extensions
+# have no entitlement that needs a profile and are signed without one. Over SSH the signing key
+# cannot be reached (errSecInternalComponent), so the scripts in tools/ run signing builds in
+# the logged-in desktop session (../tools/gui-job.sh). The test bundles are signed without a
+# profile; they need none.
+#
+# Without a team: signed ad hoc ("Sign to Run Locally") with Entitlements/TwoNoteMac-NoTeam.entitlements
+# (no Keychain access group), enough to build, run and unit-test on this Mac; the app then uses
+# the login keychain and offers no Touch ID. Set DEVELOPMENT_TEAM in ../Config/Local.xcconfig
+# for a signed build.
+name: TwoNoteMac
+configFiles:
+  Debug: ../Config/TwoNote.xcconfig
+  Release: ../Config/TwoNote.xcconfig
+options:
+  # Prints the team and bundle prefix in use, or how to set them (none set: no device builds).
+  preGenCommand: bash ../tools/check-config.sh
+  deploymentTarget:
+    macOS: "27.0"
+  createIntermediateGroups: true
+packages:
+  TwoNoteKit:
+    path: ../TwoNoteKit
+  YrsKit:
+    path: ../YrsKit
+  TwoNoteCore:
+    path: ../TwoNoteCore
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    # DEVELOPMENT_TEAM comes from ../Config (empty unless Local.xcconfig sets it); the
+    # identity and style follow from it there: Apple Development, automatic with a team, ad hoc
+    # without.
+    CODE_SIGN_STYLE: $(TWONOTE_MAC_SIGN_STYLE)
+    CODE_SIGN_IDENTITY: $(TWONOTE_MAC_SIGN_IDENTITY)
+    ENABLE_HARDENED_RUNTIME: "YES"
+    ARCHS: arm64
+    ONLY_ACTIVE_ARCH: "YES"
+    MARKETING_VERSION: "0.4"
+    CURRENT_PROJECT_VERSION: "1"
+    DEAD_CODE_STRIPPING: "YES"
+targets:
+  TwoNoteMac:
+    type: application
+    platform: macOS
+    sources:
+      - Sources
+      # The share sheet's view, for the app's own looks at it (screenshots).
+      - ShareExtension/ShareViewController.swift
+      - path: ../TwoNote/Sources/Model
+        group: iOSShared
+      - path: ../TwoNote/Shared/SharedContainer.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/DeepLink.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/RecentPages.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/ShareInbox.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/SharedItem.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/ShareModel.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/OpenTwoNoteIntent.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/WidgetViews.swift
+        group: iOSShared
+    dependencies:
+      - target: TwoNoteMacShare
+      - target: TwoNoteMacWidget
+      - package: TwoNoteCore
+        product: TwoNoteCore
+      - package: TwoNoteKit
+        product: TwoNoteCrypto
+      - package: YrsKit
+        product: YrsKit
+      - package: TwoNoteKit
+        product: TwoNoteEditor
+      - package: TwoNoteKit
+        product: TwoNoteDocuments
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: TwoNote
+        CFBundleName: TwoNote
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        TwoNoteAppGroup: $(TWONOTE_MAC_APP_GROUP)
+        TwoNoteNotificationPrefix: $(TWONOTE_MAC_NOTIFY_PREFIX)
+        LSApplicationCategoryType: public.app-category.productivity
+        # The app's Keychain access group; empty in a build without a team (no such entitlement).
+        TwoNoteKeychainAccessGroup: $(TWONOTE_MAC_KEYCHAIN_GROUP)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSHumanReadableCopyright: End-to-end encrypted notes on your own server.
+        ITSAppUsesNonExemptEncryption: false
+        # twonote://new, twonote://search, twonote://continue, twonote://page/<ids>: what the
+        # widget's buttons and rows open (../TwoNote/Shared/DeepLink.swift).
+        CFBundleURLTypes:
+          - CFBundleURLName: $(TWONOTE_MAC_BUNDLE_ID)
+            CFBundleTypeRole: Editor
+            CFBundleURLSchemes: [twonote]
+        # The server is self-hosted and usually reached over plain http:// on the home LAN or
+        # over Tailscale (a MagicDNS name such as host.tailnet.ts.net, which
+        # NSAllowsLocalNetworking does not cover), so arbitrary loads are allowed. Note content
+        # is end-to-end encrypted before it is sent and the login never sends the password,
+        # whatever the transport. Same reasoning and same key as the iPhone app.
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+    settings:
+      base:
+        PRODUCT_NAME: TwoNote
+        PRODUCT_MODULE_NAME: TwoNote
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_MAC_BUNDLE_ID)
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_ENTITLEMENTS: $(TWONOTE_MAC_APP_ENTITLEMENTS)
+        ENABLE_APP_SANDBOX: "YES"
+        ENABLE_USER_SELECTED_FILES: ""
+        COMBINE_HIDPI_IMAGES: "YES"
+      configs:
+        # A development profile adds get-task-allow (debugger attach) by default; the
+        # installed Release build goes without it.
+        Release:
+          CODE_SIGN_INJECT_BASE_ENTITLEMENTS: "NO"
+  # "TwoNote" in the Share menu. Has no key that opens anything: it seals what was shared to
+  # the share inbox's public key and leaves it in the App Group container.
+  TwoNoteMacShare:
+    type: app-extension
+    platform: macOS
+    sources:
+      - ShareExtension
+      - path: ../TwoNote/Shared/SharedContainer.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/SharedItem.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/ShareInbox.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/ShareModel.swift
+        group: iOSShared
+    dependencies:
+      - package: TwoNoteKit
+        product: TwoNoteCrypto
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: TwoNote
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        TwoNoteAppGroup: $(TWONOTE_MAC_APP_GROUP)
+        TwoNoteNotificationPrefix: $(TWONOTE_MAC_NOTIFY_PREFIX)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSHumanReadableCopyright: End-to-end encrypted notes on your own server.
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            # The iPhone's rule: text and web addresses only. Every attachment of at least one
+            # shared item is plain text or a URL, and none is a file (a file URL is a URL too)
+            # or anything else - the page format has no attachments, so TwoNote stays out of
+            # the Share menu for images, PDFs and files.
+            NSExtensionActivationRule: >-
+              SUBQUERY(extensionItems, $item,
+              $item.attachments.@count >= 1
+              AND SUBQUERY($item.attachments, $attachment,
+              (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.plain-text"
+              OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url")
+              AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.file-url")
+              ).@count == $item.attachments.@count
+              ).@count >= 1
+    settings:
+      base:
+        PRODUCT_NAME: TwoNoteMacShare
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_MAC_BUNDLE_ID).share
+        CODE_SIGN_ENTITLEMENTS: Entitlements/TwoNoteMacShare.entitlements
+        ENABLE_APP_SANDBOX: "YES"
+        ENABLE_USER_SELECTED_FILES: ""
+        SKIP_INSTALL: "YES"
+      configs:
+        Release:
+          CODE_SIGN_INJECT_BASE_ENTITLEMENTS: "NO"
+  # The widget, on the desktop and in Notification Center. Has no key either: it shows
+  # buttons, and page titles only if the user had the app write them to the App Group.
+  TwoNoteMacWidget:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: ../TwoNote/Widget/TwoNoteWidget.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/SharedContainer.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/DeepLink.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/RecentPages.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/OpenTwoNoteIntent.swift
+        group: iOSShared
+      - path: ../TwoNote/Shared/WidgetViews.swift
+        group: iOSShared
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: TwoNote
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        TwoNoteAppGroup: $(TWONOTE_MAC_APP_GROUP)
+        TwoNoteNotificationPrefix: $(TWONOTE_MAC_NOTIFY_PREFIX)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSHumanReadableCopyright: End-to-end encrypted notes on your own server.
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_NAME: TwoNoteMacWidget
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_MAC_BUNDLE_ID).widget
+        CODE_SIGN_ENTITLEMENTS: Entitlements/TwoNoteMacWidget.entitlements
+        ENABLE_APP_SANDBOX: "YES"
+        ENABLE_USER_SELECTED_FILES: ""
+        SKIP_INSTALL: "YES"
+      configs:
+        Release:
+          CODE_SIGN_INJECT_BASE_ENTITLEMENTS: "NO"
+  TwoNoteMacTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests
+      # The in-memory protocol server and the device harness of the sync core's own tests.
+      - path: ../TwoNoteCore/Tests/TwoNoteCoreTests/FakeServer.swift
+        group: CoreTestSupport
+      - path: ../TwoNoteCore/Tests/TwoNoteCoreTests/Harness.swift
+        group: CoreTestSupport
+    dependencies:
+      - target: TwoNoteMac
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_MAC_BUNDLE_ID).tests
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/TwoNote.app/Contents/MacOS/TwoNote
+        BUNDLE_LOADER: $(TEST_HOST)
+        # Injected into the app, which carries the profile; the bundle itself needs none.
+        CODE_SIGN_STYLE: Manual
+        PROVISIONING_PROFILE_SPECIFIER: ""
+  TwoNoteMacUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    sources: [UITests]
+    dependencies:
+      - target: TwoNoteMac
+      - package: TwoNoteCore
+        product: TwoNoteCore
+      - package: YrsKit
+        product: YrsKit
+      - package: TwoNoteKit
+        product: TwoNoteDocuments
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_MAC_BUNDLE_ID).uitests
+        TEST_TARGET_NAME: TwoNoteMac
+        CODE_SIGN_STYLE: Manual
+        PROVISIONING_PROFILE_SPECIFIER: ""
+schemes:
+  TwoNoteMac:
+    build:
+      targets:
+        TwoNoteMac: all
+        TwoNoteMacTests: [test]
+        TwoNoteMacUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - TwoNoteMacTests
+        - TwoNoteMacUITests

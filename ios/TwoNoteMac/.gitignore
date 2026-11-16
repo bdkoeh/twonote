@@ -1,0 +1,8 @@
+.build/
+# Written by xcodegen from project.yml.
+/Info.plist
+/ShareExtension/Info.plist
+/Widget/
+*.xcodeproj
+DerivedData/
+.DS_Store

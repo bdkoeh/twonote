@@ -1,0 +1,233 @@
+# TwoNote for iOS: the real app. Generate with `xcodegen` on the Mac; the .xcodeproj is not committed.
+#
+# Identity and signing come from ../Config/TwoNote.xcconfig (neutral defaults) and the optional
+# ../Config/Local.xcconfig (your team id and bundle prefix; copy Local.xcconfig.example). The
+# bundle ids, the App Group and the notification names below are all derived from those two
+# values; nothing here names a team.
+#
+# Signing: no device signing in this project (CODE_SIGNING_ALLOWED: NO); ../tools/device-install.sh
+# switches it on for an iPhone build, which needs DEVELOPMENT_TEAM set in Local.xcconfig.
+#
+# Simulator builds are signed ad hoc ("Sign to Run Locally", identity "-"): no certificate, no
+# account, nothing leaves the Mac. Without it the binary carries no application-identifier
+# entitlement and the simulator's Keychain refuses every call (errSecMissingEntitlement,
+# -34018), so the app could not store its keys.
+#
+# Three products: the app (<prefix>.app) and two extensions embedded in it, the share
+# extension (<prefix>.app.share, "TwoNote" in the share sheet) and the widget
+# (<prefix>.app.widget). All three are in the App Group group.<prefix>.app, the only place they
+# can all reach; each has its entitlements file in Entitlements/. Their Info.plist carries the
+# group (TwoNoteAppGroup) and the notification prefix (TwoNoteNotificationPrefix), which
+# Shared/SharedContainer.swift reads at run time. Shared/ holds the code more than one of them
+# compiles (each target lists the files it needs).
+name: TwoNote
+configFiles:
+  Debug: ../Config/TwoNote.xcconfig
+  Release: ../Config/TwoNote.xcconfig
+options:
+  # Prints the team and bundle prefix in use, or how to set them (none set: no device builds).
+  preGenCommand: bash ../tools/check-config.sh
+  deploymentTarget:
+    iOS: "27.1"
+  createIntermediateGroups: true
+packages:
+  TwoNoteKit:
+    path: ../TwoNoteKit
+  YrsKit:
+    path: ../YrsKit
+  TwoNoteCore:
+    path: ../TwoNoteCore
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    # DEVELOPMENT_TEAM comes from ../Config (empty unless Local.xcconfig sets it).
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGNING_ALLOWED: "NO"
+    "CODE_SIGNING_ALLOWED[sdk=iphonesimulator*]": "YES"
+    "CODE_SIGN_IDENTITY[sdk=iphonesimulator*]": "-"
+    TARGETED_DEVICE_FAMILY: "1,2"
+    MARKETING_VERSION: "0.4"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  TwoNote:
+    type: application
+    platform: iOS
+    sources: [Sources, Shared]
+    dependencies:
+      - target: TwoNoteShare
+      - target: TwoNoteWidget
+      - package: TwoNoteCore
+        product: TwoNoteCore
+      - package: TwoNoteKit
+        product: TwoNoteCrypto
+      - package: YrsKit
+        product: YrsKit
+      - package: TwoNoteKit
+        product: TwoNoteEditor
+      - package: TwoNoteKit
+        product: TwoNoteDocuments
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: TwoNote
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        TwoNoteAppGroup: $(TWONOTE_IOS_APP_GROUP)
+        TwoNoteNotificationPrefix: $(TWONOTE_IOS_NOTIFY_PREFIX)
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        ITSAppUsesNonExemptEncryption: false
+        # twonote://new, twonote://search, twonote://continue, twonote://page/<ids>: what the
+        # widget's buttons open (Shared/DeepLink.swift).
+        CFBundleURLTypes:
+          - CFBundleURLName: $(TWONOTE_IOS_BUNDLE_ID)
+            CFBundleTypeRole: Editor
+            CFBundleURLSchemes: [twonote]
+        # The server is self-hosted and usually reached over plain http:// on the home LAN or
+        # over Tailscale. NSAllowsLocalNetworking would cover IP addresses, .local names and
+        # unqualified names, but not a Tailscale MagicDNS name (host.tailnet.ts.net), which is
+        # a fully qualified public-looking name; so arbitrary loads are allowed instead. (The
+        # two keys cannot be combined: the presence of NSAllowsLocalNetworking makes iOS ignore
+        # NSAllowsArbitraryLoads.) Note content is end-to-end encrypted before it is sent and
+        # the login never sends the password, whatever the transport.
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+        NSLocalNetworkUsageDescription: TwoNote connects to your own TwoNote server on your network to sync your notes.
+        NSFaceIDUsageDescription: TwoNote uses Face ID to unlock your notes on this device.
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_IOS_BUNDLE_ID)
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_ENTITLEMENTS: Entitlements/TwoNote.entitlements
+  # "TwoNote" in the system share sheet. Has no key that opens anything: it seals what was
+  # shared to the share inbox's public key and leaves it in the App Group container.
+  TwoNoteShare:
+    type: app-extension
+    platform: iOS
+    sources:
+      - ShareExtension
+      - Shared/SharedContainer.swift
+      - Shared/SharedItem.swift
+      - Shared/ShareInbox.swift
+      - Shared/ShareModel.swift
+    dependencies:
+      - package: TwoNoteKit
+        product: TwoNoteCrypto
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: TwoNote
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        TwoNoteAppGroup: $(TWONOTE_IOS_APP_GROUP)
+        TwoNoteNotificationPrefix: $(TWONOTE_IOS_NOTIFY_PREFIX)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionAttributes:
+            # Text and web addresses only: every attachment of at least one shared item is
+            # plain text or a URL, and none is a file (a file URL is a URL too) or anything
+            # else - the page format has no attachments, so TwoNote stays out of the sheet for
+            # photos, PDFs and files.
+            NSExtensionActivationRule: >-
+              SUBQUERY(extensionItems, $item,
+              $item.attachments.@count >= 1
+              AND SUBQUERY($item.attachments, $attachment,
+              (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.plain-text"
+              OR ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url")
+              AND NOT (ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.file-url")
+              ).@count == $item.attachments.@count
+              ).@count >= 1
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_IOS_BUNDLE_ID).share
+        CODE_SIGN_ENTITLEMENTS: Entitlements/TwoNoteShare.entitlements
+        SKIP_INSTALL: "YES"
+  # The Home Screen widget and the Lock Screen accessories. Has no key either: it shows
+  # buttons, and page titles only if the user had the app write them to the App Group.
+  TwoNoteWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Widget
+      - Shared/SharedContainer.swift
+      - Shared/DeepLink.swift
+      - Shared/RecentPages.swift
+      - Shared/OpenTwoNoteIntent.swift
+      - Shared/WidgetViews.swift
+    info:
+      path: Widget/Info.plist
+      properties:
+        CFBundleDisplayName: TwoNote
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        TwoNoteAppGroup: $(TWONOTE_IOS_APP_GROUP)
+        TwoNoteNotificationPrefix: $(TWONOTE_IOS_NOTIFY_PREFIX)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_IOS_BUNDLE_ID).widget
+        CODE_SIGN_ENTITLEMENTS: Entitlements/TwoNoteWidget.entitlements
+        SKIP_INSTALL: "YES"
+  TwoNoteTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+      # The in-memory protocol server and the device harness of the sync core's own tests.
+      - path: ../TwoNoteCore/Tests/TwoNoteCoreTests/FakeServer.swift
+        group: CoreTestSupport
+      - path: ../TwoNoteCore/Tests/TwoNoteCoreTests/Harness.swift
+        group: CoreTestSupport
+    dependencies:
+      - target: TwoNote
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_IOS_BUNDLE_ID).tests
+  TwoNoteUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [UITests]
+    # The runner reads the App Group's files from outside the app (ExtrasEndToEndTests).
+    info:
+      path: UITests/Info.plist
+      properties:
+        TwoNoteAppGroup: $(TWONOTE_IOS_APP_GROUP)
+    dependencies:
+      - target: TwoNote
+      - package: TwoNoteCore
+        product: TwoNoteCore
+      - package: YrsKit
+        product: YrsKit
+      - package: TwoNoteKit
+        product: TwoNoteDocuments
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: $(TWONOTE_IOS_BUNDLE_ID).uitests
+schemes:
+  TwoNote:
+    build:
+      targets:
+        TwoNote: all
+        TwoNoteTests: [test]
+        TwoNoteUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - TwoNoteTests
+        - TwoNoteUITests

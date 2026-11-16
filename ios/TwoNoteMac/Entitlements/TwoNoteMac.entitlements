@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  The Mac app's sandbox: nothing but what it needs. The identifiers are build settings from
+  ../../Config/TwoNote.xcconfig: TWONOTE_MAC_BUNDLE_ID is <prefix>.mac, TeamIdentifierPrefix and
+  AppIdentifierPrefix are "<team>.". This file is used when a team is set (Local.xcconfig);
+  without one the app is signed ad hoc with TwoNoteMac-NoTeam.entitlements instead.
+  - app-sandbox: the app sees only its own container (~/Library/Containers/<prefix>.mac),
+    where the encrypted store lives, and the App Group container below.
+  - network.client: outgoing connections only, to the user's own TwoNote server (HTTP and the
+    WebSocket for live updates). No server role, no incoming connections.
+  - application-groups: the folder the app shares with its share extension and its widget
+    (~/Library/Group Containers/<team>.<prefix>.mac). What may be in it is listed in
+    ../../TwoNote/Shared/SharedContainer.swift: a public key, sealed items, and - only if the
+    user turns it on - page titles for the widget.
+    The group is team-prefixed, the Mac's own form: macOS ties a team-prefixed group to the
+    signing team itself, so no App Group has to be registered in the developer account and
+    the system never asks the user whether TwoNote may "access data from other apps" (which
+    it does for a group. identifier that the provisioning profile does not authorize).
+  No file access, no camera, no microphone, no Apple events.
+
+  - keychain-access-groups: the data-protection Keychain, as on the iPhone (the Secret Key, the
+    session token, and the Touch ID item). That Keychain needs an application identifier,
+    which macOS accepts only from a provisioning profile; this entry (Xcode's "Keychain
+    Sharing", with the app's own identifier as its only group, so nothing is shared) is what
+    makes automatic signing fetch the development profile for <prefix>.mac, which then adds
+    com.apple.application-identifier and com.apple.developer.team-identifier to the signature.
+    Without an entitlement that needs a profile, Xcode signs a Mac app without one.
+  The extensions need no Keychain, hence no profile.
+-->
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)$(TWONOTE_MAC_BUNDLE_ID)</string>
+	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)$(TWONOTE_MAC_BUNDLE_ID)</string>
+	</array>
+</dict>
+</plist>

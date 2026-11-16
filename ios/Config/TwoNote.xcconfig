@@ -1,0 +1,65 @@
+// The identity and signing of the TwoNote apps (iOS: ../TwoNote, Mac: ../TwoNoteMac). Both
+// project.yml files use this file as the base configuration of every build configuration, and
+// every bundle id, App Group, Keychain access group and Darwin notification name is derived
+// from the two settings below.
+//
+// The defaults build without an Apple developer account: the iOS app for the simulator, and
+// the Mac app signed ad hoc ("Sign to Run Locally") without its Keychain entitlement. To sign
+// with your own team (an iPhone, or the Mac app with Touch ID and the data-protection
+// Keychain), copy Local.xcconfig.example to Local.xcconfig (not committed) and set your values
+// there. Do not edit the values in this file.
+
+// Your Apple developer team id (10 characters). Empty: no team, local signing only.
+DEVELOPMENT_TEAM =
+
+// The reverse-DNS prefix of every bundle id: <prefix>.app, <prefix>.mac and their extensions.
+TWONOTE_BUNDLE_PREFIX = com.example.twonote
+
+// ---------------------------------------------------------------------------------------------
+// Derived. Nothing below needs changing.
+
+// iOS: the app, its share extension and widget, and their App Group.
+TWONOTE_IOS_BUNDLE_ID = $(TWONOTE_BUNDLE_PREFIX).app
+TWONOTE_IOS_APP_GROUP = group.$(TWONOTE_IOS_BUNDLE_ID)
+// The Darwin notifications of the iOS app are named under this.
+TWONOTE_IOS_NOTIFY_PREFIX = $(TWONOTE_IOS_BUNDLE_ID)
+
+// With a team or without one. TWONOTE_NO_TEAM is YES while DEVELOPMENT_TEAM is empty, and empty
+// once it is set (the setting named TWONOTE_NO_TEAM_<team> does not exist). TWONOTE_TEAM_PREFIX
+// is "<team>." or empty: the value the entitlements get as $(TeamIdentifierPrefix), which
+// Xcode only provides while signing, not to Info.plist files.
+TWONOTE_NO_TEAM_ = YES
+TWONOTE_NO_TEAM = $(TWONOTE_NO_TEAM_$(DEVELOPMENT_TEAM))
+TWONOTE_TEAM_PREFIX_ = $(DEVELOPMENT_TEAM).
+TWONOTE_TEAM_PREFIX_YES =
+TWONOTE_TEAM_PREFIX = $(TWONOTE_TEAM_PREFIX_$(TWONOTE_NO_TEAM))
+
+// Mac: the App Group is team-prefixed (the Mac's own form, see
+// ../TwoNoteMac/Entitlements/TwoNoteMac.entitlements), and a sandboxed Mac process may only post
+// Darwin notifications named under its App Group.
+TWONOTE_MAC_BUNDLE_ID = $(TWONOTE_BUNDLE_PREFIX).mac
+TWONOTE_MAC_APP_GROUP = $(TWONOTE_TEAM_PREFIX)$(TWONOTE_MAC_BUNDLE_ID)
+TWONOTE_MAC_NOTIFY_PREFIX = $(TWONOTE_MAC_APP_GROUP)
+
+// Mac signing. With a team: "Apple Development", automatic, with the development provisioning
+// profile that gives the app the application identifier the data-protection Keychain (and
+// Touch ID) needs. Without: ad hoc, and an entitlements file without the Keychain access group
+// (a restricted entitlement, which needs a profile; an ad hoc signed app that claims it would
+// not launch). The app then keeps its secrets in the login keychain and offers no Touch ID.
+TWONOTE_MAC_SIGN_IDENTITY_ = Apple Development
+TWONOTE_MAC_SIGN_IDENTITY_YES = -
+TWONOTE_MAC_SIGN_IDENTITY = $(TWONOTE_MAC_SIGN_IDENTITY_$(TWONOTE_NO_TEAM))
+TWONOTE_MAC_SIGN_STYLE_ = Automatic
+TWONOTE_MAC_SIGN_STYLE_YES = Manual
+TWONOTE_MAC_SIGN_STYLE = $(TWONOTE_MAC_SIGN_STYLE_$(TWONOTE_NO_TEAM))
+TWONOTE_MAC_APP_ENTITLEMENTS_ = Entitlements/TwoNoteMac.entitlements
+TWONOTE_MAC_APP_ENTITLEMENTS_YES = Entitlements/TwoNoteMac-NoTeam.entitlements
+TWONOTE_MAC_APP_ENTITLEMENTS = $(TWONOTE_MAC_APP_ENTITLEMENTS_$(TWONOTE_NO_TEAM))
+// The Mac app's Keychain access group (its only one: nothing is shared); empty without a team.
+// (The entitlement itself is $(AppIdentifierPrefix)<prefix>.mac, which for a team is <team>.)
+TWONOTE_MAC_KEYCHAIN_GROUP_ = $(TWONOTE_TEAM_PREFIX)$(TWONOTE_MAC_BUNDLE_ID)
+TWONOTE_MAC_KEYCHAIN_GROUP_YES =
+TWONOTE_MAC_KEYCHAIN_GROUP = $(TWONOTE_MAC_KEYCHAIN_GROUP_$(TWONOTE_NO_TEAM))
+
+// Your values, if you have made the file. Optional: without it the defaults above apply.
+#include? "Local.xcconfig"

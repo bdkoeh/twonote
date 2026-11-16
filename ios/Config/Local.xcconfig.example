@@ -1,0 +1,12 @@
+// Your own signing values for the TwoNote apps. Copy this file to Local.xcconfig in this folder
+// (Local.xcconfig is not committed), set both values, and run xcodegen again. TwoNote.xcconfig
+// includes it last, so what is set here wins.
+
+// Your Apple developer team id: Xcode > Settings > Accounts, or developer.apple.com >
+// Membership details. Needed to install on an iPhone and for the Mac app's Keychain and Touch ID.
+DEVELOPMENT_TEAM = ABCDE12345
+
+// A reverse-DNS prefix you own. The bundle ids become <prefix>.app, <prefix>.app.share,
+// <prefix>.app.widget (iOS) and <prefix>.mac, <prefix>.mac.share, <prefix>.mac.widget (Mac).
+// Bundle ids are unique across all developer accounts, so this cannot be someone else's.
+TWONOTE_BUNDLE_PREFIX = com.yourname.twonote

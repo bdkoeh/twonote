@@ -1,6 +1,6 @@
 # TwoNote
 
-A simpler OneNote for Windows that you host yourself. Notes are end-to-end encrypted: the server
+A simpler OneNote for Windows, iPhone, iPad and Mac that you host yourself. Notes are end-to-end encrypted: the server
 only ever stores ciphertext, and they can only be decrypted on your own devices with your master
 password plus a Secret Key (the model 1Password uses).
 
@@ -29,7 +29,8 @@ password plus a Secret Key (the model 1Password uses).
   [docs/PROTOCOL.md](docs/PROTOCOL.md), but nobody independent has reviewed it.
 - **There is no recovery.** Lose the master password, or every copy of the Secret Key, and the
   notes cannot be decrypted by anyone. The app makes you save an Emergency Kit for this reason.
-- **It is early software**: single user, Windows only, no installer, no automatic updates.
+- **It is early software**: single user, no installer, no automatic updates, and the iOS and Mac
+  apps must be built from source.
 - The server is meant for a LAN or VPN. It speaks plain HTTP; put a TLS reverse proxy in front
   of it for anything else.
 
@@ -61,6 +62,17 @@ PCs choose "Add this device" and enter the password and Secret Key.
 `--profile <name>` runs a second, fully separate instance, which is how two "devices" can be
 tried on one PC.
 
+## iPhone, iPad and Mac
+
+Native Swift clients for iOS and macOS live in [`ios/`](ios/README.md): SwiftUI apps with a
+TextKit 2 editor, Face ID / Touch ID unlock, auto-lock, search, a Share extension and a widget.
+They speak the same protocol, so they sync with the same server and the Windows client.
+
+There is no App Store build: you build them yourself on an Apple Silicon Mac with Xcode, XcodeGen
+and Rust (for the y-crdt library). Your own Apple developer team goes in
+`ios/Config/Local.xcconfig`; without one you can still build for the simulator and run the tests.
+[ios/README.md](ios/README.md) has the steps.
+
 ## Develop
 
 ```
@@ -73,6 +85,7 @@ dotnet run --project src/TwoNote.App
 | `src/TwoNote.Core` | Portable .NET library: crypto, key hierarchy, documents, local store, sync client |
 | `src/TwoNote.Server` | ASP.NET Core + SQLite server: auth, ciphertext log, WebSocket notifications |
 | `src/TwoNote.App` | WinUI 3 Windows client |
+| `ios/` | Native iOS and macOS clients (Swift); see [ios/README.md](ios/README.md) |
 | `deploy/` | Dockerfile, compose file, deployment notes |
 | `docs/DESIGN.md` | Architecture, decisions, open items |
 | `docs/PROTOCOL.md` | Wire protocol, crypto and document format: the contract for other clients |

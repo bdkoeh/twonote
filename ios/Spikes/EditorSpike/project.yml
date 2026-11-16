@@ -1,0 +1,56 @@
+# Editor spike: two replicas of one page in native UITextViews (TextKit 2).
+# Generate with `xcodegen` on the Mac; the .xcodeproj is not committed.
+name: EditorSpike
+options:
+  bundleIdPrefix: com.twonote.spike
+  deploymentTarget:
+    iOS: "27.1"
+  createIntermediateGroups: true
+packages:
+  TwoNoteKit:
+    path: ../../TwoNoteKit
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    CODE_SIGNING_ALLOWED: "NO"
+    TARGETED_DEVICE_FAMILY: "1,2"
+targets:
+  EditorSpike:
+    type: application
+    platform: iOS
+    sources: [Sources]
+    dependencies:
+      - package: TwoNoteKit
+        product: TwoNoteEditor
+      - package: TwoNoteKit
+        product: TwoNoteDocuments
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.twonote.spike.editor
+        GENERATE_INFOPLIST_FILE: "YES"
+        INFOPLIST_KEY_CFBundleDisplayName: Editor Spike
+        INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        MARKETING_VERSION: "0.1"
+        CURRENT_PROJECT_VERSION: "1"
+  EditorSpikeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [Tests]
+    dependencies:
+      - target: EditorSpike
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: "YES"
+        PRODUCT_BUNDLE_IDENTIFIER: com.twonote.spike.editor.tests
+schemes:
+  EditorSpike:
+    build:
+      targets:
+        EditorSpike: all
+        EditorSpikeTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets: [EditorSpikeTests]

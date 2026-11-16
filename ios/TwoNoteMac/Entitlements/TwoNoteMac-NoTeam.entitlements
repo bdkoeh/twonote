@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  The Mac app without a development team (no Local.xcconfig, or one without DEVELOPMENT_TEAM):
+  signed ad hoc, so for running and testing on this Mac only. The same sandbox as
+  TwoNoteMac.entitlements minus keychain-access-groups, a restricted entitlement that only a
+  provisioning profile can grant (an ad hoc signed app that claims it is not allowed to start).
+  Such a build keeps the Secret Key and the session token in the login keychain and offers no
+  Touch ID (MacSecretStore.live, MacEnvironment.swift). Without a team TeamIdentifierPrefix is
+  empty, so the App Group is plain <prefix>.mac, tied to no team.
+-->
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<key>com.apple.security.network.client</key>
+	<true/>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)$(TWONOTE_MAC_BUNDLE_ID)</string>
+	</array>
+</dict>
+</plist>

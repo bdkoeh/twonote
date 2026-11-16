@@ -1,0 +1,15 @@
+# Build outputs and local files of the iOS and Mac clients (each package's own .gitignore adds
+# its generated files).
+.build/
+.swiftpm/
+DerivedData/
+*.xcodeproj
+xcuserdata/
+YrsKit/Yrs.xcframework/
+# Each builder's team and bundle prefix (Config/Local.xcconfig.example is the template).
+Config/Local.xcconfig
+# Screenshots of the end-to-end runs (TwoNote/shots, TwoNoteMac/shots).
+shots/
+*.log
+*.xcresult
+.DS_Store

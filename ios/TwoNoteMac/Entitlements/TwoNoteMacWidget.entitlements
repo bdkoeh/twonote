@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  The widget: sandboxed (WidgetKit requires it on the Mac), no network, no Keychain, and the
+  App Group, from which it reads the page titles - only there while the user has "Show Recent
+  Pages in Widget" switched on.
+-->
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>$(TeamIdentifierPrefix)$(TWONOTE_MAC_BUNDLE_ID)</string>
+	</array>
+</dict>
+</plist>
